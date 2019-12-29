@@ -5,10 +5,7 @@ class Solution:
 
         result = []
         nums.sort()
-        t1 = 0
         t2 = 1
-        t3 = 2
-        t4 = len(nums) - 1
         
         while t2 < len(nums) - 2:
             t3 = t2 + 1
