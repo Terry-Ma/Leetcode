@@ -7,20 +7,18 @@
 
 class Solution:
     def distributeCoins(self, root: TreeNode) -> int:
-        if not root:
-            return 0
+        res = [0]
+        self.helper(root, res)
 
-        def dfs(node):
-            if (not node.left) and (not node.right):
-                result[0] += abs(node.val - 1)
-                return node.val - 1
-            else:
-                node_left = dfs(node.left) if node.left else 0
-                node_right = dfs(node.right) if node.right else 0
-                result[0] += abs(node_left + node_right + node.val - 1)
-                return node_left + node_right + node.val - 1
+        return res[0]
+    
+    def helper(self, node, res):
+        if not node:
+            return 0, 0   # coin, node num
+        l_coin, l_num = self.helper(node.left, res)
+        r_coin, r_num = self.helper(node.right, res)
+        coin = l_coin + r_coin + node.val
+        num = 1 + l_num + r_num
+        res[0] += abs(coin - num)
 
-        result = [0]
-        dfs(root)
-
-        return result[0]
+        return coin, num

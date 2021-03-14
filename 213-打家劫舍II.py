@@ -2,17 +2,14 @@ class Solution:
     def rob(self, nums: List[int]) -> int:
         if not nums:
             return 0
-        elif len(nums) <= 3:
-            return max(nums)
+        if len(nums) == 1:
+            return nums[0]
 
-        max_list_0 = [nums[-3], nums[-2], 0]
-        max_list_1 = [nums[-3] + nums[-1], 0, nums[-1]]
-        result = max(max_list_0 + max_list_1)
-        for i in range(len(nums) - 4, -1, -1):
-            cur_result_0 = nums[i] + max(max_list_0[-1], max_list_0[-2])
-            cur_result_1 = nums[i] + max(max_list_1[-1], max_list_1[-2])
-            result = max(result, max(cur_result_0, cur_result_1 * (i != 0)))
-            max_list_0 = cur_result_0, max_list_0[0], max_list_0[1]
-            max_list_1 = cur_result_1, max_list_1[0], max_list_1[1]
-
-        return result
+        dp1 = [0] * (len(nums) + 1)  # the last true
+        dp2 = [0] * (len(nums) + 1)
+        dp1[-2] = nums[-1]
+        for i in range(len(dp1) - 3, 0, -1):
+            dp1[i] = max(nums[i] + dp1[i + 2], dp1[i + 1])
+            dp2[i] = max(nums[i] + dp2[i + 2], dp2[i + 1])
+        
+        return max(nums[0] + dp2[2], dp1[1])
